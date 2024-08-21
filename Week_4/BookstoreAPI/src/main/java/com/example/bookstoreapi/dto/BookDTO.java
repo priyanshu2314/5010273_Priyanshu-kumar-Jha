@@ -3,8 +3,14 @@ package com.example.bookstoreapi.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.Version;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BookDTO {
+
+    @Version
+    private int version;
+
     @JsonProperty("bookId")
     private int id;
     private String title;
@@ -12,7 +18,6 @@ public class BookDTO {
     private double price;
     private String isbn;
 
-    // Getters and Setters
     public int getId() {
         return id;
     }

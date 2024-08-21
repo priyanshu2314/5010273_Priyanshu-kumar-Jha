@@ -27,7 +27,6 @@ public class Book {
     @Version
     private int version;
     
-    // Lombok is not working for getter and setter
 	public int getId() {
 		return id;
 	}

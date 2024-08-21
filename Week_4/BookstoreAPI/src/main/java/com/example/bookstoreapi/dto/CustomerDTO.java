@@ -9,9 +9,9 @@ public class CustomerDTO {
     private int id;
     private String name;
     private String email;
+    private String password;
     private String phone;
 
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -36,6 +36,14 @@ public class CustomerDTO {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -43,4 +51,5 @@ public class CustomerDTO {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
 }

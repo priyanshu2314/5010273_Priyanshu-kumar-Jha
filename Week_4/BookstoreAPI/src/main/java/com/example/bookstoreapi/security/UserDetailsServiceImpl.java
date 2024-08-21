@@ -21,7 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			book = BookRepository.findById(bookname)
 			        .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + bookname));
 		} catch (UsernameNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         return new org.springframework.security.core.userdetails.User(book.getTitle(), book.getAuthor(), null);
