@@ -1,6 +1,10 @@
 package com.app.bookstoreapi.controller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+// import org.springframework.hateoas.Link;
+// import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -13,18 +17,30 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import com.app.bookstoreapi.entity.Customer;
 import com.app.bookstoreapi.service.CustomerService;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/customer")
+@Validated
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
-    @GetMapping
+    @GetMapping(produces = {"application/json","application/xml"})
     public List<Customer> getAllCustomers(){
         return customerService.getAllCustomers();
     }
-    @PostMapping
-    public ResponseEntity<String> insertCustomer(@RequestBody Customer customer){
+    @GetMapping("/{id}")
+    public EntityModel<Customer> getCustomerById(@PathVariable Long id){
+        Customer customer=customerService.getCustomerById(id);
+        EntityModel<Customer> resource=EntityModel.of(customer);
+        resource.add(linkTo(methodOn(CustomerController.class).getCustomerById(id)).withSelfRel());
+        resource.add(linkTo(methodOn(CustomerController.class).getAllCustomers()).withRel("all-customers"));
+        return resource;    
+    }
+    @PostMapping(consumes = {"application/json","application/xml"},
+                produces={"application/json","application/xml"})
+    public ResponseEntity<String> insertCustomer(@Valid @RequestBody Customer customer){
         return customerService.saveCustomer(customer);
     }
     @PutMapping("/{id}")
