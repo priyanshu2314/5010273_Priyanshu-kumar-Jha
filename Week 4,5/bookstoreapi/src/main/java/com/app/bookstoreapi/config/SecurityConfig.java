@@ -14,13 +14,25 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@EnableWebMvc
 public class SecurityConfig {
-
+    public static final String[] PUBLIC_URLS={
+        "/api/auth/**",
+        "/api/customers/register",
+        "/v2/api-docs",
+        "/v3/api-docs",
+        "/v3/api-docs/**",
+        "/swagger-resources/**",
+        "/swagger-ui/**",
+        "/swagger-ui.html",
+        "/webjars/**"
+    };
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
@@ -31,9 +43,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
             .authorizeHttpRequests()
-                .requestMatchers("/**").permitAll()
-                .requestMatchers("/api/auth/**").permitAll()  // Allow access to auth endpoints
-                .requestMatchers("/api/customers/register").permitAll()  // Allow access to registration endpoint
+                .requestMatchers(PUBLIC_URLS).permitAll()
                 .anyRequest().authenticated()
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
